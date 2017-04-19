@@ -1560,13 +1560,13 @@ static int prerotateSingleLog(struct logInfo *log, int logNum,
 		message(MESS_ERROR, "could not allocate glob pattern memory\n");
 	}
 	rc = glob(glob_pattern, 0, globerr, &globResult);
-	if (!rc) {
+	if (!rc && (globResult.gl_pathc >= rotateCount)) {
 	    /* search for files to drop, if we find one remember it,
 	     * if we find another one mail and remove the first and
 	     * remember the second and so on */
 	    struct stat fst_buf;
 	    int mail_out = -1;
-	    size_t glob_count;
+	    ssize_t glob_count;
 	    /* remove the first (n - rotateCount) matches
 	     * no real rotation needed, since the files have
 	     * the date in their name */
